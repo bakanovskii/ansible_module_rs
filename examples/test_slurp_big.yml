@@ -1,0 +1,31 @@
+---
+# To run this:
+# cargo build --examples -r
+# ANSIBLE_LIBRARY=../target/release/examples/ ansible-playbook test_slurp_big.yml
+
+- name: Test slurp_rs module written in Rust
+  hosts: localhost
+  gather_facts: false
+  become: false
+  vars:
+    big_file: ../target/release/examples/big_file
+  tasks:
+    - name: Create a file of 1G filled with null bytes
+      community.general.filesize:
+        path: "{{ big_file }}"
+        size: 1G
+
+    - name: Builtin slurp module on big file
+      ansible.builtin.slurp:
+        src: "{{ big_file }}"
+      register: big_slurp_py
+
+    - name: Rust slurp module on big file
+      slurp_rs:
+        src: "{{ big_file }}"
+      register: big_slurp_rs
+
+    - name: Compare results
+      ansible.builtin.assert:
+        that:
+          - big_slurp_py == big_slurp_rs
