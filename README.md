@@ -4,26 +4,30 @@ This is a framework to write [binary modules](https://docs.ansible.com/ansible/l
 
 It tries to be somewhat similar to a Python `AnsibleModule` from `ansible.module_utils.basic`
 
+## Why
+
+You can write binary modules in Rust if performance is critical but keep in mind that Ansible itself is not very fast so if your playbook runs slow rewriting modules from Python would not help. If your goal is to optimize the overall performance rather than optimising one particular bottlenecked module you should use builtin features such as `pipelining`, `smart gathering` and etc.
+
 ## What works for now
 
 Compared to https://docs.ansible.com/ansible/latest/dev_guide/developing_program_flow_modules.html#argument-spec
 
-- [x] Dependencies between module options (see: https://docs.ansible.com/ansible/latest/dev_guide/developing_program_flow_modules.html#dependencies-between-module-options):
-  - [x] mutually_exclusive
-  - [x] required_together
-  - [x] required_one_of
-  - [x] required_if
-  - [x] required_by
+Dependencies between module options (see: https://docs.ansible.com/ansible/latest/dev_guide/developing_program_flow_modules.html#dependencies-between-module-options):
+  - [x] ~~mutually_exclusive~~
+  - [x] ~~required_together~~
+  - [x] ~~required_one_of~~
+  - [x] ~~required_if~~
+  - [x] ~~required_by~~
 
-- [ ] Module arguments:
-  - [x] required
-  - [x] default
-  - [x] fallback
-  - [x] choices
-  - [x] required_by
-  - [ ] type validation
+Module arguments:
+  - [x] ~~required~~
+  - [x] ~~default~~
+  - [x] ~~fallback~~
+  - [x] ~~choices~~
+  - [x] ~~required_by~~
+  - [x] ~~type validation~~
   - [ ] elements
-  - [ ] no_log
+  - [x] ~~no_log~~
   - [ ] aliases
   - [ ] options
   - [ ] apply_defaults
@@ -32,7 +36,7 @@ Compared to https://docs.ansible.com/ansible/latest/dev_guide/developing_program
   - [ ] removed_from_collection
   - [ ] deprecated_aliases
 
-- [ ] Methods to use internal arguments (see: https://docs.ansible.com/ansible/latest/dev_guide/developing_program_flow_modules.html#internal-arguments), for now it deserializes these arguments but makes no use of them:
+Methods to use internal arguments (see: https://docs.ansible.com/ansible/latest/dev_guide/developing_program_flow_modules.html#internal-arguments), for now it deserializes these arguments but makes no use of them:
   - [ ] no_log
   - [ ] verbosity
   - [ ] check_mode
