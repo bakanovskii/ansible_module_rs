@@ -9,7 +9,6 @@
   become: false
   vars:
     tmp_file: ../target/release/examples/hello_world
-    big_file: ../target/release/examples/big_file
   tasks:
     - name: Create some file to work with
       ansible.builtin.copy:
