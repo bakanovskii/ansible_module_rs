@@ -1,0 +1,50 @@
+---
+name: Cargo Build & Test
+
+on:
+  push:
+  pull_request:
+
+env: 
+  CARGO_TERM_COLOR: always
+  ANSIBLE_LIBRARY: ../target/release/examples/
+
+jobs:
+  lint:
+    name: Lint the project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - id: clippy
+        name: clippy
+        run: cargo clippy --all --all-targets
+
+      - id: format
+        name: format
+        run: cargo fmt --all -- --check
+
+  build_and_test:
+    name: Rust project - latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable,nightly
+      - uses: actions/setup-python@v4
+        with:
+          python_version: 3.12
+
+      - run: cargo build --verbose
+      - run: cargo test --verbose
+
+      - run: cargo test --verbose
+      - run: |
+          python3 -m pip install ansible
+          cd examples
+          ansible-playbook test_slurp.yml
