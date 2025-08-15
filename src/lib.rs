@@ -1,5 +1,3 @@
-#![feature(never_type)]
-
 pub mod ansible_module;
 pub mod builder;
 pub mod macros;
